@@ -2,12 +2,12 @@ clear;
 maindir = pwd;
 conditions = {'money', 'social'};
 subjects = load('sublist.txt');
-outdir = fullfile(maindir,'modelRegressors','TrialData_3Pmodel_new');
+outdir = fullfile(maindir,'modelRegressors','TrialData_3Pmodel_repeat');
 if ~exist(outdir,'dir')
     mkdir(outdir);
 end
 
-fid_summary = fopen(fullfile(maindir,'summary_3P_new_0Neut.csv'),'w');
+fid_summary = fopen(fullfile(maindir,'summary_3P_0Neutral_MLE_repeat.csv'),'w');
 fprintf(fid_summary,'subject,condition,palpha,palpha_se,nalpha,nalpha_se,beta,beta_se,psuedoR2,BIC\n');
 for s = 1:length(subjects)
     subject = subjects(s);
@@ -16,7 +16,7 @@ for s = 1:length(subjects)
         msg = sprintf('running subject %d on the %s condition',subject,condition);
         disp(msg);
         
-         if strcmp(condition,'Social')
+         if strcmp(condition,'social')
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
         else
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);

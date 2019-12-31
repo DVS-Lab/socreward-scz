@@ -16,8 +16,9 @@ lb = [0 0 1e-6];
 ub = [1 1 30];
 
 % set options for fmincon
-options = optimset('Display','off','MaxIter',10000,'TolFun',1e-10,'TolX',1e-10,...
-    'DiffMaxChange',1e-2,'DiffMinChange',1e-6,'MaxFunEvals',1000,'GradObj','off','DerivativeCheck','off','LargeScale','on','Algorithm','active-set');
+% options = optimset('Display','off','MaxIter',10000,'TolFun',1e-10,'TolX',1e-10,...
+%    'DiffMaxChange',1e-2,'DiffMinChange',1e-6,'MaxFunEvals',1000,'GradObj','off','DerivativeCheck','off','LargeScale','on','Algorithm','active-set');
+options = optimset('Display','off','MaxFunEvals',10000);
 
 result.choice = choice;
 result.reward = reward;
@@ -26,11 +27,12 @@ result.lb = lb;
 result.ub = ub;
 result.options = options;
 
-reward2 = reward(11:end);
+% reward2 = reward(11:end);
+reward2 = reward;
 reward2(abs(reward2) > 3) = [];
 nchoices = length(reward2);
 
-for i = 1:10 % 10 iterations
+for i = 1:100 % 10 iterations
     
     %random starting conditions; will interate 10 times and take best fit
     inx = rand(1,length(lb)).*(ub-lb)+lb;
@@ -41,14 +43,14 @@ for i = 1:10 % 10 iterations
     
     %[b, loglike, exitflag, output, lambda, grad, H] = fmincon(@model, inx0, [],[],[],[],lb,ub,[], options, choice, reward);
     [b, loglike, exitflag, output, ~, ~, H] = fmincon(@model, inx, [],[],[],[],lb,ub,[], options, choice, reward, trialtype);
-    se = transpose(sqrt(diag(inv(H))));
-    result.iter(i).palpha = b(1); %learning rate
-    result.iter(i).palpha_se = se(1); %learning rate se
-    result.iter(i).nalpha = b(2); %learning rate
-    result.iter(i).nalpha_se = se(2); %learning rate se
-    result.iter(i).beta = b(3); %inverse temp param
-    result.iter(i).beta_se = se(3); %inverse temp param se
-
+    
+    result.iter(i).palpha = 0; %learning rate
+    result.iter(i).palpha_se = 0; %learning rate se
+    result.iter(i).nalpha = 0; %learning rate
+    result.iter(i).nalpha_se = 0; %learning rate se
+    result.iter(i).beta = 0; %inverse temp param
+    result.iter(i).beta_se = 0; %inverse temp param se
+    
     result.iter(i).modelLL = -loglike;
     result.iter(i).nullmodelLL = log(0.5)*nchoices; %LL of random-choice model
     result.iter(i).pseudoR2 = 1 + loglike/(result.iter(i).nullmodelLL); %pseudo-R2 statistic
@@ -63,7 +65,19 @@ for i = 1:10 % 10 iterations
     
 end
 
+
 [~,I] = max([result.iter.modelLL]);
+
+%only compute se for best H. still probably bad with warning
+H = result.iter(I).H;
+se = transpose(sqrt(diag(inv(H))));
+result.iter(I).palpha = b(1); %learning rate
+result.iter(I).palpha_se = se(1); %learning rate se
+result.iter(I).nalpha = b(2); %learning rate
+result.iter(I).nalpha_se = se(2); %learning rate se
+result.iter(I).beta = b(3); %inverse temp param
+result.iter(I).beta_se = se(3); %inverse temp param se
+
 result.final = result.iter(I);
 
 
@@ -80,7 +94,6 @@ loglike = 0; % log likelihood
 
 ntrial = length(choice);
 V = zeros(ntrial,3); %columns: 1 (pos), 2 (neg), 3 (neu)
-%V(1,:) = [2 2 2]; %assuming neutral starting point
 V(1,:) = [0 0 0]; %assuming neutral starting point
 rpe = zeros(ntrial,1);
 cV = zeros(ntrial,1);
@@ -129,7 +142,7 @@ for t = 1:ntrial
                 else %positive or neutral RPE
                     V(t+1,3) = V(t,3) + palpha*rpe(t); %update chosen
                 end
-
+                
                 
                 V(t+1,2) = V(t,2); %don't update
                 V(t+1,1) = V(t,1); %don't update
@@ -150,7 +163,7 @@ for t = 1:ntrial
                 else %positive or neutral RPE
                     V(t+1,1) = V(t,1) + palpha*rpe(t); %update chosen
                 end
-
+                
                 V(t+1,2) = V(t,2); %don't update
                 V(t+1,3) = V(t,3); %don't update
                 
@@ -175,17 +188,17 @@ for t = 1:ntrial
         
         %compute likelihood with softmax
         % wait till learning stabalizes
-        if t > 10
+        %if t > 5
             likelihood = 1/(1 + exp(-k));
             loglike = loglike + log(likelihood);
-        end
+        %end
     end
 end
 % OPTIONAL (from Yael Niv's workshop): putting a prior on the parameters (so we are looking for the MAP and not the ML solution)
 %loglike = loglike + log(betapdf(palpha,2,2));  % the prior on alpha is a beta distrbution
 %loglike = loglike + log(betapdf(nalpha,2,2));  % the prior on alpha is a beta distrbution
-loglike = loglike + log(gampdf(beta,2,3));  % the prior on beta is a gamma distribution
-%Rg = gamrnd(2,3,10000,1);
+%loglike = loglike + log(gampdf(beta,2,1));  % the prior on beta is a gamma distribution
+%Rg = gamrnd(2,1,10000,1);
 %figure,hist(Rg,100); title('gamma distribution (prior for inverse temperature');
 %Rb = betarnd(2,2,10000,1);
 %figure,hist(Rb,100); title('beta distribution (prior for learning rate)');

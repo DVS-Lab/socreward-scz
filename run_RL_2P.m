@@ -2,12 +2,12 @@ clear;
 maindir = pwd;
 conditions = {'money', 'social'};
 subjects = load('sublist.txt');
-outdir = fullfile(maindir,'modelRegressors','TrialData_2Pmodel_new');
+outdir = fullfile(maindir,'modelRegressors','TrialData_2Pmodel_repeat');
 if ~exist(outdir,'dir')
     mkdir(outdir);
 end
 
-fid_summary = fopen(fullfile(maindir,'summary_2P_new_2Neut_v2.csv'),'w');
+fid_summary = fopen(fullfile(maindir,'summary_2P_0Neutral_MLE_repeat.csv'),'w');
 fprintf(fid_summary,'subject,condition,alpha,alpha_se,beta,beta_se,psuedoR2,BIC\n');
 for s = 1:length(subjects)
     subject = subjects(s);
@@ -16,7 +16,7 @@ for s = 1:length(subjects)
         msg = sprintf('running subject %d on the %s condition',subject,condition);
         disp(msg);
         
-         if strcmp(condition,'Social')
+         if strcmp(condition,'social')
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
         else
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
@@ -48,9 +48,9 @@ for s = 1:length(subjects)
         TrialType = dataArray{:, 5};
         Accuracy = dataArray{:, 6};
         
-        % scale rewards between 1 and 3 
+        % scale rewards between -1 and 1 
         Reward = (Reward.*2) + 1;
-        %Reward = Reward - 2;
+        Reward = Reward - 2;
         
         %% run RL_2P model and save results
         result = RL_2P(SlotChoice, Reward, TrialType);
