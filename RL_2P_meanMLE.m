@@ -11,8 +11,8 @@ function result = RL_2P_meanMLE(choice, reward, trialtype)
 
 %}
 
-alpha = 0.478947816;
-beta = 3.012863276;
+alpha = 0.251602092;
+beta = 16.93636755;
 
 b = [alpha beta];
 dof = length(b);

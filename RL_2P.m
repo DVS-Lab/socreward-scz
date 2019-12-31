@@ -13,7 +13,7 @@ function result = RL_2P(choice, reward, trialtype)
 
 % set upper and lower bounds for free parameters
 lb = [0 1e-6];
-ub = [1 30];
+ub = [1 50];
 
 % set options for fmincon
 % options = optimset('Display','off','MaxIter',10000,'TolFun',1e-10,'TolX',1e-10,...

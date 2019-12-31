@@ -2,12 +2,12 @@ clear;
 maindir = pwd;
 conditions = {'money', 'social'};
 subjects = load('sublist.txt');
-outdir = fullfile(maindir,'modelRegressors','TrialData_3Pmodel_repeat');
+outdir = fullfile(maindir,'modelRegressors','TrialData_3Pmodel');
 if ~exist(outdir,'dir')
     mkdir(outdir);
 end
 
-fid_summary = fopen(fullfile(maindir,'summary_3P_0Neutral_MLE_repeat.csv'),'w');
+fid_summary = fopen(fullfile(maindir,'summary_3P_0Neutral_MLE.csv'),'w');
 fprintf(fid_summary,'subject,condition,palpha,palpha_se,nalpha,nalpha_se,beta,beta_se,psuedoR2,BIC\n');
 for s = 1:length(subjects)
     subject = subjects(s);
@@ -49,9 +49,6 @@ for s = 1:length(subjects)
         TrialType = dataArray{:, 5};
         Accuracy = dataArray{:, 6};
         
-        % scale rewards between 1 and 3 
-        Reward = (Reward.*2) + 1;
-        Reward = Reward - 2;
         
         %% run RL_2P model and save results
         result = RL_3P(SlotChoice, Reward, TrialType);

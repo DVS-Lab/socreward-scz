@@ -46,9 +46,6 @@ for s = 1:length(subjects)
         TrialType = dataArray{:, 5};
         Accuracy = dataArray{:, 6};
         
-        % scale rewards between 1 and 3 
-        Reward = (Reward.*2) + 1;
-        Reward = Reward - 2;
         
         %% run RL_2P model and save results
         result = RL_2P_meanMLE(SlotChoice, Reward, TrialType);
