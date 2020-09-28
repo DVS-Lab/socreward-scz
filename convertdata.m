@@ -76,7 +76,7 @@ for i = 1:length(sourcedata)
 end
 
 % % write out a sublist for later
-% dlmwrite('sublist.txt',unique(sublist));
+dlmwrite('sublist.txt',unique(sublist));
 % dlmwrite('indata_hBayesDM.tsv',datahb,'delimiter','\t','-append');
 
 
