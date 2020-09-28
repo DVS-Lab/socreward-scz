@@ -7,7 +7,7 @@ if ~exist(outdir,'dir')
     mkdir(outdir);
 end
 
-fid_summary = fopen(fullfile(maindir,'summary_2P_0Neutral_MLE_fixedEffects2.csv'),'w');
+fid_summary = fopen(fullfile(maindir,'summary_2P_0Neutral_MLE_fixedEffects.csv'),'w');
 fprintf(fid_summary,'condition,alpha,alpha_se,beta,beta_se,psuedoR2,BIC\n');
 for c = 1:length(conditions)
     

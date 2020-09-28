@@ -2,7 +2,7 @@ clear;
 maindir = pwd;
 conditions = {'money', 'social'};
 subjects = load('sublist.txt');
-outdir = fullfile(maindir,'modelRegressors','TrialData_2Pmodel_meanMLE');
+outdir = fullfile(maindir,'modelRegressors','TrialData_2Pmodel_fixedEffects');
 if ~exist(outdir,'dir')
     mkdir(outdir);
 end
@@ -11,10 +11,8 @@ for s = 1:length(subjects)
     subject = subjects(s);
     for c = 1:length(conditions)
         condition = conditions{c};
-        msg = sprintf('running subject %d on the %s condition',subject,condition);
-        disp(msg);
         
-         if strcmp(condition,'social')
+        if strcmp(condition,'social')
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
         else
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
@@ -48,12 +46,12 @@ for s = 1:length(subjects)
         
         
         %% run RL_2P model and save results
-        result = RL_2P_meanMLE(SlotChoice, Reward, TrialType);
+        result = RL_2P_fixedEffects(SlotChoice, Reward, TrialType, alpha, beta);
         
         %fprintf(fid_summary,'subject,condition,alpha,alpha_se,beta,beta_se,psuedoR2,BIC\n');
         R = result;
         
-        fid_subj = fopen(fullfile(outdir,['rpe_' num2str(subject) '_' condition '_2P_meanMLE.csv']),'w');
+        fid_subj = fopen(fullfile(outdir,['rpe_' num2str(subject) '_' condition '_2P_fixedEffects.csv']),'w');
         fprintf(fid_subj,'subject,trial,slotchoice,reward,ExpectedValue,RPE\n');
         for t = 1:length(Reward)
             fprintf(fid_subj,'%d,%d,%d,%d,%f,%f\n',subject,t,SlotChoice(t),Reward(t),R.cV(t),R.rpe(t));

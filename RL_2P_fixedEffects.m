@@ -1,18 +1,6 @@
-function result = RL_2P_meanMLE(choice, reward, trialtype)
+function result = RL_2P_fixedEffects(choice, reward, trialtype, alpha, beta)
 
-%{
 
-3. Slot Choice (1=pos; 2=neg; 3=neutral) ? shows which slot machine they choose
-4. Reward (1=positive; 0.5=neutral; 0=negative) ? shows the outcome they actually got (e.g.,. positive money is a picture of 5 cents; neutral money is an empty circle; negative money is a picture of 5 cents with a red line through it)
-    80% probability
-5. Trial type (0=positive; 1=negative) ? positive trials have a choice of positive or neutral slot; negative trials have a choice of negative or neutral slot
-    0 --> c = [1 3]; 1 --> c = [2 3];
-6. Accuracy (1=correct response; 0=effort incorrect response).
-
-%}
-
-alpha = 0.251602092;
-beta = 16.93636755;
 
 b = [alpha beta];
 dof = length(b);
