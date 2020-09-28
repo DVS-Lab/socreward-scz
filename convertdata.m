@@ -10,7 +10,7 @@ clear;
 maindir = pwd;
 
 % grab source data
-sourcedatadir = '/Users/tug87422/Dropbox/Projects/Temple/LearningClinical_wPamButler/newData-Sep2020/';
+sourcedatadir = '/Users/tug87422/Dropbox/Projects/Temple/LearningClinical_wPamButler/all_data/';
 sourcedata = dir([sourcedatadir '*.xls*']);
 sourcedata = struct2cell(sourcedata);
 sourcedata = sourcedata(1,1:end);
