@@ -14,8 +14,12 @@ for s = 1:length(subjects)
         
         if strcmp(condition,'social')
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
+            alpha = 0.009676;
+            beta = 3.137308;
         else
             filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
+            alpha = 0.203495;
+            beta = 3.112148;
         end
         delimiter = ',';
         startRow = 2;

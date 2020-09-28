@@ -2,10 +2,6 @@ clear;
 maindir = pwd;
 conditions = {'money', 'social'};
 subjects = load('sublist.txt');
-outdir = fullfile(maindir,'modelRegressors','TrialData_2Pmodel');
-if ~exist(outdir,'dir')
-    mkdir(outdir);
-end
 
 fid_summary = fopen(fullfile(maindir,'summary_2P_0Neutral_MLE_fixedEffects.csv'),'w');
 fprintf(fid_summary,'condition,alpha,alpha_se,beta,beta_se,psuedoR2,BIC\n');
