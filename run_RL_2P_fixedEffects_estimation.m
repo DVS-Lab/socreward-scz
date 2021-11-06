@@ -13,11 +13,8 @@ for c = 1:length(conditions)
         subject = subjects(s);
         condition = conditions{c};
         
-        if strcmp(condition,'social')
-            filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
-        else
-            filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
-        end
+        
+        filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
         delimiter = ',';
         startRow = 2;
         

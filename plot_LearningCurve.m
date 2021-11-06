@@ -48,9 +48,14 @@ for c = 1:length(conditions)
     x = 1:nbins;
     y = mean(lc);
     e = std(lc) / sqrt(size(lc,1)); %across sessions
-    figure,errorbar(x,y,e)
-    title([ condition ' Learning Curve'])
-    xlabel('Time (bins of 5 trials)')
-    ylabel('accuracy')
-    
+    if c == 1
+        errorbar(x,y,e)
+        hold on
+    else
+        errorbar(x,y,e,'r')
+        title('Learning Curve')
+        xlabel('Time (bins of 5 trials)')
+        ylabel('accuracy')
+        legend(conditions,'Location','southeast')
+    end
 end

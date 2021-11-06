@@ -7,23 +7,19 @@ if ~exist(outdir,'dir')
     mkdir(outdir);
 end
 
+T = readtable('summary_2P_0Neutral_MLE_fixedEffects.csv');
+
 for s = 1:length(subjects)
     subject = subjects(s);
     for c = 1:length(conditions)
         condition = conditions{c};
         
-        if strcmp(condition,'social')
-            filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
-            alpha = 0.009676;
-            beta = 3.137308;
-        else
-            filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
-            alpha = 0.203495;
-            beta = 3.112148;
-        end
+        filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
+        alpha = T.alpha(c);
+        beta = T.beta(c);
         delimiter = ',';
         startRow = 2;
-       
+        
         %% Format string for each line of text:
         %   column1: double (%f)
         %	column2: double (%f)
