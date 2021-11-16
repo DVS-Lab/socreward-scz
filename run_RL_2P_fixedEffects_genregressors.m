@@ -15,8 +15,8 @@ for s = 1:length(subjects)
         condition = conditions{c};
         
         filename = fullfile(maindir,'data',[num2str(subject) '_' condition '.csv']);
-        alpha = T.alpha(c);
-        beta = T.beta(c);
+        alpha = T.alpha(1);
+        beta = T.beta(1);
         delimiter = ',';
         startRow = 2;
         
